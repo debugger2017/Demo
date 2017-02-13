@@ -1,3 +1,3 @@
 from django.contrib import admin
-
-# Register your models here.
+from mail_system.models import RegisteredUsers
+admin.site.register(RegisteredUsers)
