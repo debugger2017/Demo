@@ -6,11 +6,14 @@
     </head>
 
     <body>
-        {% if user.is_authenticated  %} 
-        <h1>Welcome {{ user.username}}!</h1>
-        {% else %}
-        <h1>Welcome hello world!</h1>
-    	{% endif %}
+        {% if user.is_authenticated %}
+            <a href="/mail_system/restricted/">Restricted Page</a><br />
+            <a href="/mail_system/logout/">Logout</a><br />
+            {% else %}
+            <a href="/mail_system/register/">Register Here</a><br />
+            <a href="/mail_system/login/">Login</a><br />
+        {% endif %}
+
     </body>
 
 </html>
