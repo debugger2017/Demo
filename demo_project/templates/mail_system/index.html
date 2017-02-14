@@ -6,8 +6,11 @@
     </head>
 
     <body>
-        <h1>Rango says...</h1>
-        hello world! 
+        {% if user.is_authenticated  %} 
+        <h1>Welcome {{ user.username}}!</h1>
+        {% else %}
+        <h1>Welcome hello world!</h1>
+    	{% endif %}
     </body>
 
 </html>
