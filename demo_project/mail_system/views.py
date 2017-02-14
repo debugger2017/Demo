@@ -3,6 +3,9 @@ from mail_system.forms import UserForm, RegisteredUsersForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 
+def index(request):
+    return HttpResponse("At index...")
+
 def register(request):
     registered = False
     if request.method == 'POST':
