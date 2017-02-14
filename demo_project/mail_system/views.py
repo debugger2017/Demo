@@ -2,6 +2,11 @@ from django.shortcuts import render
 from mail_system.forms import UserForm, RegisteredUsersForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def restricted(request):
+    return HttpResponse("You are not logged in..")
 
 def index(request):
     return render(request, 'mail_system/index.html')
