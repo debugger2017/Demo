@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 
 def index(request):
-    return HttpResponse("At index...")
+    return render(request, 'mail_system/index.html')
 
 def register(request):
     registered = False
@@ -36,10 +36,11 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
+        print("hiii")
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username = username,password = password)
-
+        print (username,password,user)
         if user:
             if user.is_active:
                 login(request,user)
