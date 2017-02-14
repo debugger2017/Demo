@@ -102,3 +102,6 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     TEMPLATE_PATH,
 )
+
+LOGIN_URL = '/mail_system/login/'
+

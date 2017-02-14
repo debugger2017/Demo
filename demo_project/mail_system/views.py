@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from mail_system.forms import UserForm, RegisteredUsersForm
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -57,3 +57,8 @@ def user_login(request):
             return HttpResponse("Invlaid credentials")
     else:
         return render(request,'mail_system/login.html',{})
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/mail_system/')
