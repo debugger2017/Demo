@@ -11,4 +11,4 @@ class UserForm(forms.ModelForm):
 class RegisteredUsersForm(forms.ModelForm):
 	class Meta:
 		model = RegisteredUsers
-		#fields = 'mobile'
+		fields = ('mobile','city')
