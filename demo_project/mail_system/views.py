@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from mail_system.forms import UserForm, RegisteredUsersForm
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate, login
 
 def register(request):
     registered = False
@@ -30,4 +31,20 @@ def register(request):
             'mail_system/register.html',
             {'user_form': user_form, 'registered_users_form': registered_users_form, 'registered': registered} )
 
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username = username,password = password)
 
+        if user:
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect('/mail_system/')
+            else:
+                return HttpResponseRedirect('Your account is deactivated')
+        else:
+            print ("Invalid login details")
+            return HttpResponse("Invlaid credentials")
+    else:
+        return render(request,'mail_system/login.html',{})
