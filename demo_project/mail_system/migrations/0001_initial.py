@@ -13,14 +13,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Mail',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
-                ('subject', models.CharField(max_length=128)),
+                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('subject', models.CharField(max_length=256)),
                 ('content', models.CharField(max_length=4096)),
                 ('is_spam', models.BooleanField(default=False)),
                 ('is_read', models.BooleanField(default=False)),
-                ('timestamp', models.DateTimeField(unique=True, auto_now_add=True)),
+                ('timestamp', models.DateTimeField(auto_now_add=True, unique=True)),
             ],
             options={
+                'managed': True,
             },
             bases=(models.Model,),
         ),
