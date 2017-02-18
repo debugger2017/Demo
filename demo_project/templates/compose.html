@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mail System</title>
+    </head>
+
+    <body>
+        <h1>Compose Mail </h1>
+
+        <form id="mail_form" method="post" action="/mail_system/mail_sent/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ mail_form.as_p }}
+            <input type="submit" name="submit" value="Compose" />
+        </form>
+    </body>
+</html>

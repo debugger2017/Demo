@@ -1,4 +1,5 @@
 from django import forms
+<<<<<<< HEAD
 from django.contrib.auth.models import User
 from mail_system.models import RegisteredUsers
 
@@ -12,3 +13,11 @@ class RegisteredUsersForm(forms.ModelForm):
 	class Meta:
 		model = RegisteredUsers
 		fields = ('mobile','city')
+=======
+from mail_system.models import Mail
+
+class MailForm(forms.ModelForm):
+    class Meta:
+    	model = Mail
+    	fields = ('content','subject')	
+>>>>>>> mail_store
