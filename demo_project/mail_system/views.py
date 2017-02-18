@@ -6,6 +6,11 @@ def index(request):
     return render(request, 'index.html')
 
 def compose(request):
+    if request.method == 'GET':
+        mail_form = MailForm()
+    return render(request, 'compose.html',{'mail_form': mail_form})
+
+def mail_sent(request):
     if request.method == 'POST':
         mail_form = MailForm(data = request.POST) 
         if mail_form.is_valid():
@@ -13,11 +18,4 @@ def compose(request):
             mail.save()
         else:
             print(mail_form.errors)
-    else:
-        mail_form = MailForm()
-        #Email composition form to be displayed
-
-    return render(request, 'compose.html',{'mail_form': mail_form})
-
-def mail_sent(request):
     return render(request, 'mail_sent.html')
