@@ -24,4 +24,8 @@ class Mail(models.Model):
     def __str__(self):
         return self.subject;
 
+class UserMails(models.Model):
+    sender = models.ForeignKey(User, related_name = 'sender_id', on_delete = models.CASCADE)
+    receiver = models.ForeignKey(User, related_name = 'receiver_id', on_delete = models.CASCADE)
+    mail = models.ForeignKey(Mail, on_delete = models.CASCADE)
 
