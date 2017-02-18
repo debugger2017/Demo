@@ -3,7 +3,7 @@ from mail_system.forms import MailForm
 # Create your views here.
 def index(request):
     #Neede to write the index.html in templates
-    return render(request, 'mail_system/index.html')
+    return render(request, 'index.html')
 
 def compose(request):
     if request.method == 'POST':
@@ -17,5 +17,7 @@ def compose(request):
         mail_form = MailForm()
         #Email composition form to be displayed
 
-    return render(request, 'mail_system/compose.html',{'mail_form': mail_form})
+    return render(request, 'compose.html',{'mail_form': mail_form})
 
+def mail_sent(request):
+    return render(request, 'mail_sent.html')
