@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-<<<<<<< HEAD
 class RegisteredUsers(models.Model):
 	user = models.OneToOneField(User)
 	mobile = models.CharField(max_length = 10)
@@ -9,7 +8,7 @@ class RegisteredUsers(models.Model):
 
 	def __str__(self):
 		return self.user.username
-=======
+
 # Create your models here.
 class Mail(models.Model):
     subject = models.CharField(max_length = 256)
@@ -26,5 +25,3 @@ class Mail(models.Model):
         return self.subject;
 
 
-
->>>>>>> mail_store

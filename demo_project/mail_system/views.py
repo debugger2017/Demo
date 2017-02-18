@@ -1,5 +1,5 @@
 from django.shortcuts import render
-<<<<<<< HEAD
+
 from mail_system.forms import UserForm, RegisteredUsersForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -63,7 +63,6 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/mail_system/')
-=======
 from mail_system.forms import MailForm
 # Create your views here.
 def index(request):
@@ -84,4 +83,3 @@ def mail_sent(request):
         else:
             print(mail_form.errors)
     return render(request, 'mail_sent.html')
->>>>>>> mail_store
