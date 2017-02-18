@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Mail System</title>
+    </head>
+
+    <body>
+        {% if user.is_authenticated %}
+            <a href="/mail_system/restricted/">Restricted Page</a><br />
+            <a href="/mail_system/logout/">Logout</a><br />
+            {% else %}
+            <a href="/mail_system/register/">Register Here</a><br />
+            <a href="/mail_system/login/">Login</a><br />
+        {% endif %}
+
+    </body>
+
+</html>
