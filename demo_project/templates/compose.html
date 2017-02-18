@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Compose Mail</title>
+    </head>
+
+    <body>
+    <!--Check wheter he is still logged in !-->
+        <h1>Compose the mail</h1>
+        <form id="mail_form" method="post" action="/mail_system/sent_mail/" enctype="multipart/form-data">
+        {{ mail_form.as_p}}
+
+        </form>
+    </body>
+</html>
