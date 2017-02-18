@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def restricted(request):
+    
     return HttpResponse("You are not logged in..")
 
 def index(request):
@@ -50,7 +51,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                return HttpResponseRedirect('/mail_system/')
+                return HttpResponseRedirect('/mail_system/compose/')
             else:
                 return HttpResponseRedirect('Your account is deactivated')
         else:
@@ -68,7 +69,7 @@ from mail_system.forms import MailForm
 def index(request):
     #Neede to write the index.html in templates
     return render(request, 'index.html')
-
+@login_required
 def compose(request):
     if request.method == 'GET':
         mail_form = MailForm()
@@ -78,6 +79,7 @@ def mail_sent(request):
     if request.method == 'POST':
         mail_form = MailForm(data = request.POST) 
         if mail_form.is_valid():
+            print(request.user.username)
             mail = mail_form.save()
             mail.save()
         else:
