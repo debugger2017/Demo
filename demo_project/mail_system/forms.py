@@ -20,3 +20,8 @@ class MailForm(forms.ModelForm):
     class Meta:
     	model = Mail
     	fields = ('content','subject')	
+
+class ReceieverForm (forms.ModelForm):
+	class Meta:
+		model = User
+		fields = ('username','email')

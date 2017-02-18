@@ -1,9 +1,9 @@
 from django.shortcuts import render
-
-from mail_system.forms import UserForm, RegisteredUsersForm
+from mail_system.forms import UserForm, RegisteredUsersForm, MailForm, ReceieverForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+
 
 @login_required
 def restricted(request):
@@ -38,8 +38,7 @@ def register(request):
         registered_users_form = RegisteredUsersForm()
 
     return render(request,
-            'mail_system/register.html',
-            {'user_form': user_form, 'registered_users_form': registered_users_form, 'registered': registered} )
+            'mail_system/register.html', {'user_form': user_form , 'registered_users_form': registered_users_form, 'registered': registered} )
 
 def user_login(request):
     if request.method == 'POST':
@@ -64,16 +63,17 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/mail_system/')
-from mail_system.forms import MailForm
-# Create your views here.
+
 def index(request):
     #Neede to write the index.html in templates
     return render(request, 'index.html')
+
 @login_required
 def compose(request):
     if request.method == 'GET':
         mail_form = MailForm()
-    return render(request, 'compose.html',{'mail_form': mail_form})
+        receiver_form = ReceieverForm()
+    return render(request, 'compose.html',{'mail_form': mail_form , 'receiver_form': receiver_form })
 
 def mail_sent(request):
     if request.method == 'POST':
