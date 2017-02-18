@@ -33,7 +33,7 @@ def register(request):
 
     else:
         user_form = UserForm()
-        registered_users_form = RegisteredUsersForm
+        registered_users_form = RegisteredUsersForm()
 
     return render(request,
             'mail_system/register.html',
