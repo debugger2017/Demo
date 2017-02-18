@@ -7,6 +7,9 @@ class Mail(models.model):
     is_spam = models.BooleanField()
     is_read = models.BooleanField()
     timestamp = models.DateTimeField(unique = TRUE)
+    
+    def __str__(self):
+        return self.subject;
 
 
 
