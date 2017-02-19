@@ -22,15 +22,7 @@ class MailForm(forms.ModelForm):
     	model = Mail
     	fields = ('content','subject')
 
-    def	clean(self):
-        cleaned_data  = self.cleaned_data
-        subject = cleaned_data.get('subject')
-        receiver = cleaned_data.get('receiver')
-        #print(subject, receiver)
-        #if( len(subject) <= 0 ):
-         #   raise forms.ValidationError("Subject can not be blank")
-        #if(receiver.length <= 0):
-         #   raise forms.ValidationError("Receiver feild should not be blank")
+    
 
 
 
