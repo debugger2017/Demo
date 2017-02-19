@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from mail_system.forms import UserForm, RegisteredUsersForm, MailForm, ReceieverForm
+from mail_system.forms import UserForm, RegisteredUsersForm, MailForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from mail_system.models import RegisteredUsers, Mail, UserMails
 
 
 @login_required
 def restricted(request):
-    
     return HttpResponse("You are not logged in..")
 
 def index(request):
@@ -64,24 +65,33 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/mail_system/')
 
+
 def index(request):
     #Neede to write the index.html in templates
     return render(request, 'index.html')
+
 
 @login_required
 def compose(request):
     if request.method == 'GET':
         mail_form = MailForm()
-        receiver_form = ReceieverForm()
-    return render(request, 'compose.html',{'mail_form': mail_form , 'receiver_form': receiver_form })
+    return render(request, 'compose.html',{'mail_form': mail_form })
+
 
 def mail_sent(request):
     if request.method == 'POST':
         mail_form = MailForm(data = request.POST) 
         if mail_form.is_valid():
             print(request.user.username)
-            mail = mail_form.save()
-            mail.save()
+            mail = mail_form.save() 
+            #print(mail_form.__dict__('receiver'))
+            to_email = mail_form.cleaned_data.get('receiver')
+            to_user = User.objects.get(email = to_email)
+            from_user = User.objects.get(username = request.user.username)
+            if to_user and from_user:
+                mail.save()
+                user_mail = UserMails(receiver_id = to_user.id , sender_id = from_user.id , mail_id = mail.id)
+                user_mail.save()
         else:
             print(mail_form.errors)
     return render(request, 'mail_sent.html')
