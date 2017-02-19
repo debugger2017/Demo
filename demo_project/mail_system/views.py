@@ -1,10 +1,10 @@
 from django.shortcuts import render
-
-from mail_system.forms import UserForm, RegisteredUsersForm
+from django.contrib.auth.models import User 
+from mail_system.forms import UserForm, RegisteredUsersForm, MailForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
+from mail_system.models import UserMails, RegisteredUsers, Mail 
 @login_required
 def restricted(request):
     return HttpResponse("You are not logged in..")
@@ -50,7 +50,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                return HttpResponseRedirect('/mail_system/')
+                return HttpResponseRedirect('/mail_system/compose/')
             else:
                 return HttpResponseRedirect('Your account is deactivated')
         else:
@@ -78,8 +78,19 @@ def mail_sent(request):
     if request.method == 'POST':
         mail_form = MailForm(data = request.POST) 
         if mail_form.is_valid():
+            print(request.user.username)
             mail = mail_form.save()
-            mail.save()
+            to_email = mail_form.cleaned_data.get('receiver')
+            try:
+                to_user = User.objects.get(email = to_email)
+            except User.DoesNotExist:
+                print('hhhhhhhhhhhhhhhhhhhhhhhhh')
+                to_user = None
+            from_user = User.objects.get(username = request.user.username)
+            if to_user and from_user:
+                mail.save()
+                user_mail = UserMails(receiver_id = to_user.id, sender_id = from_user.id, mail_id = mail.id)
+                user_mail.save()    
         else:
-            print(mail_form.errors)
+            return render(request, 'compose.html', {'mail_form':mail_form})
     return render(request, 'mail_sent.html')

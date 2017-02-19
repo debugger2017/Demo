@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Mail',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
                 ('subject', models.CharField(max_length=256)),
                 ('content', models.CharField(max_length=4096)),
                 ('is_spam', models.BooleanField(default=False)),
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RegisteredUsers',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
                 ('mobile', models.CharField(max_length=10)),
                 ('city', models.CharField(max_length=10)),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
@@ -42,10 +42,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserMails',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
                 ('mail', models.ForeignKey(to='mail_system.Mail')),
-                ('receiver', models.ForeignKey(related_name='receiver_id', to=settings.AUTH_USER_MODEL)),
-                ('sender', models.ForeignKey(related_name='sender_id', to=settings.AUTH_USER_MODEL)),
+                ('receiver', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='receiver_id')),
+                ('sender', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='sender_id')),
             ],
             options={
             },
