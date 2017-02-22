@@ -1,31 +1,40 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>Mail System</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        
+        <link rel="stylesheet" href="{% static 'css/register.css' %}">
     </head>
 
     <body>
-        <h1>Register with Mail System</h1>
 
         {% if registered %}
         Mail System says: <strong>thank you for registering!</strong>
         {% else %}
-        Mail System says: <strong>register here!</strong><br />
+        
+		<div class = "mycard">
+            <div class="row">
+            <div class="col-md-4 offset-md-4 text-center">
+                <div class="card">
+                    <div class="card-block">
+                    <h4 class="card-title">Sign Up</h4>
+                        <form id="user_form" method="post" action="/mail_system/register/"
+                                enctype="multipart/form-data">
 
-        <form id="user_form" method="post" action="/mail_system/register/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            <!-- Display each form. The as_p method wraps each element in a paragraph
-                 (<p>) element. This ensures each element appears on a new line,
-                 making everything look neater. -->
-            {{ user_form.as_p }}
-            {{ registered_users_form.as_p }}
-            
-            <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
-        </form>
+                            {% csrf_token %}
+                            {{ user_form.as_p }}
+                            {{ registered_users_form.as_p }}
+                           
+                            <input type="submit" name="submit" value="Register" class = "btn btn-primary" /> 
+                        </form>
+                     </div>  
+                </div>
+            </div>
+        </div>
+        </div>
         {% endif %}
+
     </body>
 </html>
