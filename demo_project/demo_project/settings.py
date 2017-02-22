@@ -40,6 +40,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'mail_system',
     'bootstrap3',
+    'material',
+    
+
 )
 
 MIDDLEWARE_CLASSES = (
