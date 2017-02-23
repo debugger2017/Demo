@@ -42,7 +42,6 @@ INSTALLED_APPS = (
     'bootstrap3',
     'material',
     
-
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,6 +1,7 @@
 h1 {
     color: #FCA205;
 }
-.mycard {
+.card {
 	margin-top: 70px;
+	height: 200px;
 }
