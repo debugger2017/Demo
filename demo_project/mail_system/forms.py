@@ -1,12 +1,7 @@
 from django import forms
-<<<<<<< HEAD
 from mail_system.models import Mail, RegisteredUsers
 from django.contrib.auth.models import User 
-=======
-
-from django.contrib.auth.models import User
 from mail_system.models import RegisteredUsers, Mail
->>>>>>> user-mails
 
 class UserForm(forms.ModelForm):
 	password = forms.CharField(label="",widget = forms.PasswordInput(attrs = {'placeholder': 'Password'}))
@@ -24,8 +19,7 @@ class RegisteredUsersForm(forms.ModelForm):
 		fields = ('mobile','city')
 
 class MailForm(forms.ModelForm):
-    receiver = forms.CharField(label = "To")
-    
+    receiver = forms.CharField(label = "To")    
     class Meta:
         model = Mail
         fields = ('content','subject')
