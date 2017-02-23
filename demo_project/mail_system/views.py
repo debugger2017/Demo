@@ -1,9 +1,11 @@
 from django.shortcuts import render
-
-from mail_system.forms import UserForm, RegisteredUsersForm
+from mail_system.forms import UserForm, RegisteredUsersForm, MailForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from mail_system.models import RegisteredUsers, Mail, UserMails
+
 
 @login_required
 def restricted(request):
@@ -37,8 +39,7 @@ def register(request):
         registered_users_form = RegisteredUsersForm()
 
     return render(request,
-            'mail_system/register.html',
-            {'user_form': user_form, 'registered_users_form': registered_users_form, 'registered': registered} )
+            'mail_system/register.html', {'user_form': user_form , 'registered_users_form': registered_users_form, 'registered': registered} )
 
 def user_login(request):
     if request.method == 'POST':
@@ -50,7 +51,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                return HttpResponseRedirect('/mail_system/')
+                return HttpResponseRedirect('/mail_system/compose/')
             else:
                 return HttpResponseRedirect('Your account is deactivated')
         else:
@@ -63,23 +64,34 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/mail_system/')
-from mail_system.forms import MailForm
-# Create your views here.
+
+
 def index(request):
     #Neede to write the index.html in templates
     return render(request, 'index.html')
 
+
+@login_required
 def compose(request):
     if request.method == 'GET':
         mail_form = MailForm()
-    return render(request, 'compose.html',{'mail_form': mail_form})
+    return render(request, 'compose.html',{'mail_form': mail_form })
+
 
 def mail_sent(request):
     if request.method == 'POST':
         mail_form = MailForm(data = request.POST) 
         if mail_form.is_valid():
-            mail = mail_form.save()
-            mail.save()
+            print(request.user.username)
+            mail = mail_form.save() 
+            #print(mail_form.__dict__('receiver'))
+            to_email = mail_form.cleaned_data.get('receiver')
+            to_user = User.objects.get(email = to_email)
+            from_user = User.objects.get(username = request.user.username)
+            if to_user and from_user:
+                mail.save()
+                user_mail = UserMails(receiver_id = to_user.id , sender_id = from_user.id , mail_id = mail.id)
+                user_mail.save()
         else:
             print(mail_form.errors)
     return render(request, 'mail_sent.html')
