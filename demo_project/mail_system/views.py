@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from mail_system.models import RegisteredUsers, Mail, UserMails
-
+from mail_system.spamfilter import SpamFilter 
 
 @login_required
 def restricted(request):
@@ -39,6 +39,7 @@ def register(request):
             print (user_form.errors, registered_users_form.errors)
 
     else:
+        SpamFilter.main()
         user_form = UserForm()
         registered_users_form = RegisteredUsersForm()
 
