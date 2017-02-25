@@ -11,6 +11,10 @@ from mail_system.models import RegisteredUsers, Mail, UserMails
 def restricted(request):
     return HttpResponse("You are not logged in..")
 
+def training(request):
+    if request.method == 'GET':
+        return render(request, 'mail_system/training.html')
+
 def index(request):
     return render(request, 'mail_system/index.html')
 
