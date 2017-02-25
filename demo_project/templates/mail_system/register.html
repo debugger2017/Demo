@@ -1,31 +1,49 @@
+{% load staticfiles %}
+{% include 'material/includes/material_css.html' %}
+{% include 'material/includes/material_js.html' %}
+{% load material_form %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>Mail System</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+        <link rel="stylesheet" href="{% static 'css/register.css' %}">
     </head>
 
     <body>
-        <h1>Register with Mail System</h1>
 
         {% if registered %}
         Mail System says: <strong>thank you for registering!</strong>
         {% else %}
-        Mail System says: <strong>register here!</strong><br />
+        <div class = "row">
+            <div class = "col m4 offset-m4">  
+                <div class = "mycard">
+                    <div class = "card">
+                        <div class = "row">
+                            <div class = "col m4 offset-m4"> 
+                                <span class = "card-title" >SignUp</span>
+                            </div>
+                        </div>
+                        <div class = "card-content">
+                            <form id="user_form" method="post" action="/mail_system/register/" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{user_form.as_p}}
+                                {{registered_users_form.as_p}}
+                                <div class = "row">
+                                    <div class = "col m4 offset-m4"> 
+                                        <button class="btn waves-effect waves-light" type="submit">Submit
+                                            <i class="material-icons right">send</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
-        <form id="user_form" method="post" action="/mail_system/register/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            <!-- Display each form. The as_p method wraps each element in a paragraph
-                 (<p>) element. This ensures each element appears on a new line,
-                 making everything look neater. -->
-            {{ user_form.as_p }}
-            {{ registered_users_form.as_p }}
-            
-            <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
-        </form>
+                </div>
+            </div>
+        </div>   
         {% endif %}
     </body>
 </html>

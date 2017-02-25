@@ -39,6 +39,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mail_system',
+    'bootstrap3',
+    'material',
+    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -104,4 +107,5 @@ TEMPLATE_DIRS = (
 )
 
 LOGIN_URL = '/mail_system/login/'
+TIME_ZONE =  'Asia/Kolkata'
 
