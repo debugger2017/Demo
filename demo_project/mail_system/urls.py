@@ -9,6 +9,7 @@ urlpatterns = patterns('',
 	url(r'^restricted/', views.restricted, name='restricted'),		
 	url(r'^logout/$' , views.user_logout, name='logout'),
 	url(r'^compose/$', views.compose, name = 'compose'),
-	url(r'^mail_sent/$', views.mail_sent, name = 'mail_sent')
+	url(r'^mail_sent/$', views.mail_sent, name = 'mail_sent'),
+	url(r'^inbox/$', views.inbox, name = 'inbox')
 	)
 

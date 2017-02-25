@@ -95,3 +95,15 @@ def mail_sent(request):
         else:
             print(mail_form.errors)
     return render(request, 'mail_sent.html')
+
+def inbox(request):
+    if request.method == 'GET':
+        current_user = request.user
+        records = UserMails.objects.filter(receiver_id=current_user.id) 
+        mails = []
+        for record in records:
+            from_user = User.objects.get(id=record.sender_id)
+            mail = Mail.objects.get(id=record.mail_id)
+            mails.append(mail)
+        return render(request,
+            'mail_system/inbox.html', {'current_user': current_user, 'records': records , 'mails':mails , 'from_user':from_user})
