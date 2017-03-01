@@ -69,4 +69,5 @@ class SpamFilter():
 
         # evaluate its performance
         SpamFilter.evaluate(train_set, test_set, classifier)
+        return classifier
 
