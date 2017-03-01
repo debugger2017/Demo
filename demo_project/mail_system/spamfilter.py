@@ -10,25 +10,29 @@ from nltk import NaiveBayesClassifier, classify
 stoplist = stopwords.words('english')
 
 class SpamFilter():
+    @staticmethod
     def init_lists(folder):
         a_list = []
         file_list = os.listdir(folder)
         for a_file in file_list:
-            f = open(folder + a_file, 'r')
+            f = open(folder + a_file, 'r', errors='ignore')
             a_list.append(f.read())
         f.close()
         return a_list
 
+    @staticmethod
     def preprocess(sentence):
         lemmatizer = WordNetLemmatizer()
-        return [lemmatizer.lemmatize(word.lower()) for word in word_tokenize(str(sentence, errors='ignore'))]
+        return [lemmatizer.lemmatize(word.lower()) for word in word_tokenize(str(sentence))]
 
+    @staticmethod    
     def get_features(text, setting):
         if setting=='bow':
-            return {word: count for word, count in Counter(preprocess(text)).items() if not word in stoplist}
+            return {word: count for word, count in Counter(SpamFilter.preprocess(text)).items() if not word in stoplist}
         else:
-            return {word: True for word in preprocess(text) if not word in stoplist}
+            return {word: True for word in SpamFilter.preprocess(text) if not word in stoplist}
 
+    @staticmethod
     def train(features, samples_proportion):
         train_size = int(len(features) * samples_proportion)
         # initialise the training and test sets
@@ -39,6 +43,7 @@ class SpamFilter():
         classifier = NaiveBayesClassifier.train(train_set)
         return train_set, test_set, classifier
 
+    @staticmethod
     def evaluate(train_set, test_set, classifier):
         # check how the classifier performs on the training and test sets
         print ('Accuracy on the training set = ' + str(classify.accuracy(classifier, train_set)))
@@ -48,20 +53,20 @@ class SpamFilter():
 
     def main():
         # initialise the data
-        spam = init_lists('enron1/spam/')
-        ham = init_lists('enron1/ham/')
+        spam = SpamFilter.init_lists('/home/mahesh/django/Demo/demo_project/mail_system/enron1/spam/')
+        ham = SpamFilter.init_lists('/home/mahesh/django/Demo/demo_project/mail_system/enron1/ham/')
         all_emails = [(email, 'spam') for email in spam]
         all_emails += [(email, 'ham') for email in ham]
         random.shuffle(all_emails)
         print ('Corpus size = ' + str(len(all_emails)) + ' emails')
 
         # extract the features
-        all_features = [(get_features(email, ''), label) for (email, label) in all_emails]
+        all_features = [(SpamFilter.get_features(email, ''), label) for (email, label) in all_emails]
         print ('Collected ' + str(len(all_features)) + ' feature sets')
 
         # train the classifier
-        train_set, test_set, classifier = train(all_features, 0.8)
+        train_set, test_set, classifier = SpamFilter.train(all_features, 0.8)
 
         # evaluate its performance
-        evaluate(train_set, test_set, classifier)
+        SpamFilter.evaluate(train_set, test_set, classifier)
 
