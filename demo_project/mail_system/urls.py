@@ -13,4 +13,3 @@ urlpatterns = patterns('',
 	url(r'^inbox/$', views.inbox, name = 'inbox'),
 	url(r'^training/$', views.training, name = 'training')
 	)
-
