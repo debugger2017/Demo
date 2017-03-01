@@ -108,4 +108,4 @@ TEMPLATE_DIRS = (
 
 LOGIN_URL = '/mail_system/login/'
 TIME_ZONE =  'Asia/Kolkata'
-
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cookies'
