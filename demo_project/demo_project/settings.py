@@ -39,8 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mail_system',
-    'bootstrap3',
-    'material',
     
 )
 
@@ -108,4 +106,9 @@ TEMPLATE_DIRS = (
 
 LOGIN_URL = '/mail_system/login/'
 TIME_ZONE =  'Asia/Kolkata'
+<<<<<<< HEAD
 #SESSION_ENGINE = 'django.contrib.sessions.backends.cookies'
+=======
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+>>>>>>> 16d0ae2fda02c7817db0b6e9b8f1449785af07d7

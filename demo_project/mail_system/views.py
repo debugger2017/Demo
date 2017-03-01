@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from mail_system.models import RegisteredUsers, Mail, UserMails
-
+from mail_system.spamfilter import SpamFilter as sf
 
 @login_required
 def restricted(request):
@@ -39,6 +39,7 @@ def register(request):
             print (user_form.errors, registered_users_form.errors)
 
     else:
+        request.session['classifier'] = SpamFilter.main()
         user_form = UserForm()
         registered_users_form = RegisteredUsersForm()
 
@@ -93,6 +94,10 @@ def mail_sent(request):
             to_user = User.objects.get(email = to_email)
             from_user = User.objects.get(username = request.user.username)
             if to_user and from_user:
+                classifier = request.session.get('classifier')
+                text = mail.subject+" "+mail.content    
+                features = sf.get_features(text,'dummy')
+                mail.is_spam = classifier.classify(features)
                 mail.save()
                 user_mail = UserMails(receiver_id = to_user.id , sender_id = from_user.id , mail_id = mail.id)
                 user_mail.save()
