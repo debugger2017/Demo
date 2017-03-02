@@ -7,8 +7,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
         <link rel="stylesheet" href="{% static 'css/compose.css' %}">
     </head>
-
-    <body id = "bg" style="background-image: url('{% static 'img/Starry_Night_Over_the_Rhone.jpeg'%}')";>
+    <body id = "bg" style="background-image: url('{% static 'img/IMG_358033.jpg'%}')";>
         <div class = "row">
             <div class = "col m4 offset-m4">  
                 <div class = "mycard">
@@ -32,10 +31,16 @@
                             </form>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>   
         
+        <div class = "inbox">
+            <a href="/mail_system/inbox/"><button>Inbox</button></a>
+        </div>
+
+        <div class = "spam">
+            <a href="/mail_system/spam/"><button>Spam</button></a>
+        </div>
     </body>
 </html>
