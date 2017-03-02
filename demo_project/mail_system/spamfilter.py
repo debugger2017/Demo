@@ -53,8 +53,8 @@ class SpamFilter():
 
     def main():
         # initialise the data
-        spam = SpamFilter.init_lists('/home/mahesh/django/Demo/demo_project/mail_system/enron1/spam/')
-        ham = SpamFilter.init_lists('/home/mahesh/django/Demo/demo_project/mail_system/enron1/ham/')
+        spam = SpamFilter.init_lists('/home/debugger2017/Demo/demo_project/mail_system/enron1/spam/')
+        ham = SpamFilter.init_lists('/home/debugger2017/Demo/demo_project/mail_system/enron1/ham/')
         all_emails = [(email, 'spam') for email in spam]
         all_emails += [(email, 'ham') for email in ham]
         random.shuffle(all_emails)

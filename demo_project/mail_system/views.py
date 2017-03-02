@@ -39,7 +39,9 @@ def register(request):
             print (user_form.errors, registered_users_form.errors)
 
     else:
-        request.session['classifier'] = SpamFilter.main()
+        request.session['classifier'] = sf.main()
+        if request.session.get('classifier') == None:
+            print("77777777777777777777777777")
         user_form = UserForm()
         registered_users_form = RegisteredUsersForm()
 
@@ -82,7 +84,7 @@ def compose(request):
         mail_form = MailForm()
     return render(request, 'compose.html',{'mail_form': mail_form })
 
-
+@login_required
 def mail_sent(request):
     if request.method == 'POST':
         mail_form = MailForm(data = request.POST) 
@@ -95,6 +97,8 @@ def mail_sent(request):
             from_user = User.objects.get(username = request.user.username)
             if to_user and from_user:
                 classifier = request.session.get('classifier')
+                if classifier == None:
+                    print("555555555555555555555555555555555555")
                 text = mail.subject+" "+mail.content    
                 features = sf.get_features(text,'dummy')
                 mail.is_spam = classifier.classify(features)
@@ -105,6 +109,7 @@ def mail_sent(request):
             print(mail_form.errors)
     return render(request, 'mail_sent.html')
 
+@login_required
 def inbox(request):
     if request.method == 'GET':
         current_user = request.user

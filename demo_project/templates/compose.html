@@ -1,20 +1,41 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>Mail System</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+        <link rel="stylesheet" href="{% static 'css/compose.css' %}">
     </head>
 
-    <body>
-        <h1>Compose Mail </h1>
+    <body id = "bg" style="background-image: url('{% static 'img/Starry_Night_Over_the_Rhone.jpeg'%}')";>
+        <div class = "row">
+            <div class = "col m4 offset-m4">  
+                <div class = "mycard">
+                    <div class = "card">
+                        <div class = "row">
+                            <div class = "col m3 offset-m4"> 
+                                <span class = "card-title" >Compose</span>
+                            </div>
+                        </div>
+                        <div class = "card-content">
+                            <form id="mail_form" method="post" action="/mail_system/mail_sent/" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{mail_form.as_p}}
+                                <div class = "row">
+                                    <div class = "col m4 offset-m4"> 
+                                        <button class="btn waves-effect waves-light" type="submit">Submit
+                                            <i class="material-icons right">send</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
-        <form id="mail_form" method="post" action="/mail_system/mail_sent/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            {{ mail_form.as_p }}
-            
-            <input type="submit" name="submit" value="Compose" />
-        </form>
+                </div>
+            </div>
+        </div>   
+        
     </body>
 </html>
