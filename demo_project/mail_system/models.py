@@ -24,7 +24,7 @@ class Mail(models.Model):
     class Meta:
         managed = True      # add this
         app_label = 'mail_system' 
-    
+
     def __str__(self):
         return self.subject;
 
@@ -32,10 +32,9 @@ class UserMails(models.Model):
     sender = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "sender_id")
     receiver = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "receiver_id")
     mail = models.ForeignKey(Mail, on_delete = models.CASCADE)
-    
+
     class Meta:
         managed = True      # add this
         app_label = 'mail_system' 
-    
-    def __str__(self):
-        return (str(self.mail.is_spam));
+
+

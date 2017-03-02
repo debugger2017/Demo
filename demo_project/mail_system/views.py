@@ -100,7 +100,12 @@ def mail_sent(request):
                 f.close()
                 text = mail.subject+" "+mail.content    
                 features = sf.get_features(text,'dummy')
-                mail.is_spam = classifier.classify(features)
+                check = classifier.classify(features)
+                if check == "ham":
+                    mail.is_spam = False
+                else:
+                    mail.is_spam = True
+                print("$$$$$$$$$"+check)
                 mail.save()
                 user_mail = UserMails(receiver_id = to_user.id , sender_id = from_user.id , mail_id = mail.id)
                 user_mail.save()

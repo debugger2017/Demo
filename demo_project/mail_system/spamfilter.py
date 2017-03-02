@@ -16,21 +16,10 @@ class SpamFilter():
         a_list = []
         file_list = os.listdir(folder)
         for a_file in file_list:
-            f = open(folder + a_file, 'r')
             f = open(folder + a_file, 'r', errors='ignore')
             a_list.append(f.read())
         f.close()
         return a_list
-
-    def preprocess(sentence):
-        lemmatizer = WordNetLemmatizer()
-        return [lemmatizer.lemmatize(word.lower()) for word in word_tokenize(str(sentence, errors='ignore'))]
-
-    def get_features(text, setting):
-        if setting=='bow':
-            return {word: count for word, count in Counter(preprocess(text)).items() if not word in stoplist}
-        else:
-            return {word: True for word in preprocess(text) if not word in stoplist}
 
     @staticmethod
     def preprocess(sentence):
@@ -65,8 +54,6 @@ class SpamFilter():
 
     def main():
         # initialise the data
-        spam = init_lists('enron1/spam/')
-        ham = init_lists('enron1/ham/')
         spam = SpamFilter.init_lists('/home/debugger2017/Demo/demo_project/mail_system/enron1/spam/')
         ham = SpamFilter.init_lists('/home/debugger2017/Demo/demo_project/mail_system/enron1/ham/')
         all_emails = [(email, 'spam') for email in spam]
@@ -75,14 +62,6 @@ class SpamFilter():
         print ('Corpus size = ' + str(len(all_emails)) + ' emails')
 
         # extract the features
-        all_features = [(get_features(email, ''), label) for (email, label) in all_emails]
-        print ('Collected ' + str(len(all_features)) + ' feature sets')
-
-        # train the classifier
-        train_set, test_set, classifier = train(all_features, 0.8)
-
-        # evaluate its performance
-        evaluate(train_set, test_set, classifier)
         all_features = [(SpamFilter.get_features(email, ''), label) for (email, label) in all_emails]
         print ('Collected ' + str(len(all_features)) + ' feature sets')
 
@@ -94,4 +73,3 @@ class SpamFilter():
         f = open('my_classifier.pickle', 'wb')
         pickle.dump(classifier, f)
         f.close()
-
