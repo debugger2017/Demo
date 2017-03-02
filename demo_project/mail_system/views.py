@@ -40,7 +40,7 @@ def register(request):
             print (user_form.errors, registered_users_form.errors)
 
     else:
-        sf.main()
+        #sf.main()
         user_form = UserForm()
         registered_users_form = RegisteredUsersForm()
 
