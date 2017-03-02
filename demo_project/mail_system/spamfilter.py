@@ -6,32 +6,22 @@ from collections import Counter
 from nltk import word_tokenize, WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import NaiveBayesClassifier, classify
-<<<<<<< HEAD
-=======
 import pickle
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
 
 stoplist = stopwords.words('english')
 
 class SpamFilter():
-<<<<<<< HEAD
-=======
     @staticmethod
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
     def init_lists(folder):
         a_list = []
         file_list = os.listdir(folder)
         for a_file in file_list:
-<<<<<<< HEAD
             f = open(folder + a_file, 'r')
-=======
             f = open(folder + a_file, 'r', errors='ignore')
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
             a_list.append(f.read())
         f.close()
         return a_list
 
-<<<<<<< HEAD
     def preprocess(sentence):
         lemmatizer = WordNetLemmatizer()
         return [lemmatizer.lemmatize(word.lower()) for word in word_tokenize(str(sentence, errors='ignore'))]
@@ -42,7 +32,6 @@ class SpamFilter():
         else:
             return {word: True for word in preprocess(text) if not word in stoplist}
 
-=======
     @staticmethod
     def preprocess(sentence):
         lemmatizer = WordNetLemmatizer()
@@ -56,7 +45,6 @@ class SpamFilter():
             return {word: True for word in SpamFilter.preprocess(text) if not word in stoplist}
 
     @staticmethod
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
     def train(features, samples_proportion):
         train_size = int(len(features) * samples_proportion)
         # initialise the training and test sets
@@ -67,10 +55,7 @@ class SpamFilter():
         classifier = NaiveBayesClassifier.train(train_set)
         return train_set, test_set, classifier
 
-<<<<<<< HEAD
-=======
     @staticmethod
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
     def evaluate(train_set, test_set, classifier):
         # check how the classifier performs on the training and test sets
         print ('Accuracy on the training set = ' + str(classify.accuracy(classifier, train_set)))
@@ -80,20 +65,16 @@ class SpamFilter():
 
     def main():
         # initialise the data
-<<<<<<< HEAD
         spam = init_lists('enron1/spam/')
         ham = init_lists('enron1/ham/')
-=======
         spam = SpamFilter.init_lists('/home/debugger2017/Demo/demo_project/mail_system/enron1/spam/')
         ham = SpamFilter.init_lists('/home/debugger2017/Demo/demo_project/mail_system/enron1/ham/')
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
         all_emails = [(email, 'spam') for email in spam]
         all_emails += [(email, 'ham') for email in ham]
         random.shuffle(all_emails)
         print ('Corpus size = ' + str(len(all_emails)) + ' emails')
 
         # extract the features
-<<<<<<< HEAD
         all_features = [(get_features(email, ''), label) for (email, label) in all_emails]
         print ('Collected ' + str(len(all_features)) + ' feature sets')
 
@@ -102,7 +83,6 @@ class SpamFilter():
 
         # evaluate its performance
         evaluate(train_set, test_set, classifier)
-=======
         all_features = [(SpamFilter.get_features(email, ''), label) for (email, label) in all_emails]
         print ('Collected ' + str(len(all_features)) + ' feature sets')
 
@@ -114,5 +94,4 @@ class SpamFilter():
         f = open('my_classifier.pickle', 'wb')
         pickle.dump(classifier, f)
         f.close()
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
 

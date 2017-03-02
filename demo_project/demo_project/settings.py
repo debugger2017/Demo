@@ -38,12 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mail_system',
-<<<<<<< HEAD
-    'material',
-=======
->>>>>>> 1c4114cb29bff98a13db11f6d516d922095cb73c
-    
+    'mail_system',    
 )
 
 MIDDLEWARE_CLASSES = (
