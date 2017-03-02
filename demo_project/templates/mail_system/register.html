@@ -1,7 +1,4 @@
 {% load staticfiles %}
-{% include 'material/includes/material_css.html' %}
-{% include 'material/includes/material_js.html' %}
-{% load material_form %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,7 +8,7 @@
         <link rel="stylesheet" href="{% static 'css/register.css' %}">
     </head>
 
-    <body>
+    <body id = "bg" style="background-image: url('{% static 'img/a.jpeg'%}')";>
 
         {% if registered %}
         Mail System says: <strong>thank you for registering!</strong>

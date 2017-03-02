@@ -1,20 +1,46 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>Mail System</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+        <link rel="stylesheet" href="{% static 'css/compose.css' %}">
     </head>
+    <body id = "bg" style="background-image: url('{% static 'img/IMG_358033.jpg'%}')";>
+        <div class = "row">
+            <div class = "col m4 offset-m4">  
+                <div class = "mycard">
+                    <div class = "card">
+                        <div class = "row">
+                            <div class = "col m3 offset-m4"> 
+                                <span class = "card-title" >Compose</span>
+                            </div>
+                        </div>
+                        <div class = "card-content">
+                            <form id="mail_form" method="post" action="/mail_system/mail_sent/" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{mail_form.as_p}}
+                                <div class = "row">
+                                    <div class = "col m4 offset-m4"> 
+                                        <button class="btn waves-effect waves-light" type="submit">Submit
+                                            <i class="material-icons right">send</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
+        
+        <div class = "inbox">
+            <a href="/mail_system/inbox/"><button>Inbox</button></a>
+        </div>
 
-    <body>
-        <h1>Compose Mail </h1>
-
-        <form id="mail_form" method="post" action="/mail_system/mail_sent/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            {{ mail_form.as_p }}
-            
-            <input type="submit" name="submit" value="Compose" />
-        </form>
+        <div class = "spam">
+            <a href="/mail_system/spam/"><button>Spam</button></a>
+        </div>
     </body>
 </html>

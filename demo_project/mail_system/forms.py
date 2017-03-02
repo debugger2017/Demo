@@ -19,7 +19,9 @@ class RegisteredUsersForm(forms.ModelForm):
 		fields = ('mobile','city')
 
 class MailForm(forms.ModelForm):
-    receiver = forms.CharField(label = "To")    
+    receiver = forms.CharField(label="",widget = forms.TextInput(attrs = {'placeholder': 'To'})) 
+    content = forms.CharField(label="",widget = forms.TextInput(attrs = {'placeholder': 'Content'}))    
+    subject = forms.CharField(label="",widget = forms.TextInput(attrs = {'placeholder': 'Subject'}))
     class Meta:
         model = Mail
-        fields = ('content','subject')
+        fields = ('subject','content')
