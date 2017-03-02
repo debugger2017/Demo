@@ -6,6 +6,7 @@ from collections import Counter
 from nltk import word_tokenize, WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import NaiveBayesClassifier, classify
+import pickle
 
 stoplist = stopwords.words('english')
 
@@ -69,5 +70,7 @@ class SpamFilter():
 
         # evaluate its performance
         SpamFilter.evaluate(train_set, test_set, classifier)
-        return classifier
+        f = open('my_classifier.pickle', 'wb')
+        pickle.dump(classifier, f)
+        f.close()
 

@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from mail_system.models import RegisteredUsers, Mail, UserMails
 from mail_system.spamfilter import SpamFilter as sf
+import pickle
 
 @login_required
 def restricted(request):
@@ -39,9 +40,7 @@ def register(request):
             print (user_form.errors, registered_users_form.errors)
 
     else:
-        request.session['classifier'] = sf.main()
-        if request.session.get('classifier') == None:
-            print("77777777777777777777777777")
+        sf.main()
         user_form = UserForm()
         registered_users_form = RegisteredUsersForm()
 
@@ -96,9 +95,9 @@ def mail_sent(request):
             to_user = User.objects.get(email = to_email)
             from_user = User.objects.get(username = request.user.username)
             if to_user and from_user:
-                classifier = request.session.get('classifier')
-                if classifier == None:
-                    print("555555555555555555555555555555555555")
+                f = open('my_classifier.pickle', 'rb')
+                classifier = pickle.load(f)
+                f.close()
                 text = mail.subject+" "+mail.content    
                 features = sf.get_features(text,'dummy')
                 mail.is_spam = classifier.classify(features)
