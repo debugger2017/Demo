@@ -1,0 +1,40 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+	<script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+   <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">	  
+</head>
+<body id = "bg" style="background-image: url('{% static 'img/IMG_358033.jpg'%}')";>
+	{% csrf_token %}
+	<div class = "row">
+		<div class = "col m8 offset-m2">	
+			<table class="highlight">
+				<thead>
+		          <tr>
+		          	  
+		          	  <th data-field="id">From</th>
+		              <th data-field="name">Subject</th>
+		              <th data-field="price">Content</th>
+		              <th data-field="price">Time</th>
+		          </tr>
+		        </thead>
+				{% for mail in mails %}
+					<tbody>
+			        	<tr>
+			        		<td>{{from_user.username}}</td>
+			        		<td>{{mail.subject}}</td>
+			            	<td>{{mail.content}}</td>
+			            	<td>{{mail.timestamp}}</td>	            				          		
+			          	</tr>
+			       	</tbody>
+			    {% endfor %}
+			</table>
+		</div>
+	</div>
+</body>
+</html>
