@@ -135,7 +135,7 @@ def spam(request):
         for record in records:
             from_user = User.objects.get(id=record.sender_id)
             mail = Mail.objects.get(id=record.mail_id)
-            if mail.is_spam:
+            if mail.is_spam == True:
                 mails.append(mail)
         return render(request,
             'mail_system/inbox.html', {'current_user': current_user, 'records': records , 'mails':mails , 'from_user':from_user})
