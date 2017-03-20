@@ -12,5 +12,7 @@ urlpatterns = patterns('',
 	url(r'^mail_sent/$', views.mail_sent, name = 'mail_sent'),
 	url(r'^inbox/$', views.inbox, name = 'inbox'),
 	url(r'^training/$', views.training, name = 'training'),
-	url(r'^spam/$', views.spam, name = 'spam')
+	url(r'^spam/$', views.spam, name = 'spam'),
+	url(r'^inbox/test/$', views.test, name = 'test')
+
 	)

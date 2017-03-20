@@ -139,3 +139,9 @@ def spam(request):
                 mails.append(mail)
         return render(request,
             'mail_system/inbox.html', {'current_user': current_user, 'records': records , 'mails':mails , 'from_user':from_user})
+
+def test(request):
+    if request.method == 'GET':
+        mail = Mail.objects.get(id=request.META['QUERY_STRING'])
+        mail.is_spam = True
+        mail.save()
