@@ -37,4 +37,14 @@ class UserMails(models.Model):
         managed = True      # add this
         app_label = 'mail_system' 
 
+class Records(models.Model):
+    from_user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "from_user_id")
+    to_user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "to_user_id")
+    mail_count =  models.IntegerField(default=0)
+    is_spam = models.BooleanField(default = False)
+    class Meta:
+        unique_together = ('from_user', 'to_user',)
+        managed = True      
+        app_label = 'mail_system' 
+
 
