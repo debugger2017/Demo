@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Mail(models.Model):
     subject = models.CharField(max_length = 256)
     content = models.CharField(max_length = 4096)
