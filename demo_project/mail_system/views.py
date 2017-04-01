@@ -1,59 +1,37 @@
-from django.shortcuts import render
-from mail_system.forms import UserForm, RegisteredUsersForm, MailForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+from mail_system.forms import UserForm, MailForm
 from django.contrib.auth.models import User
-from mail_system.models import RegisteredUsers, Mail, UserMails , Records
+from mail_system.models import Mail, User_Mail, Relation
 from mail_system.spamfilter import SpamFilter as sf
 import pickle
 
-@login_required
-def restricted(request):
-    return HttpResponse("You are not logged in..")
-
-def training(request):
-    if request.method == 'GET':
-        return render(request, 'mail_system/training.html')
-
-def index(request):
-    return render(request, 'mail_system/index.html')
-
-def register(request):
+def user_register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
-        registered_users_form = RegisteredUsersForm(data=request.POST)
-
         if user_form.is_valid() and registered_users_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-
-            registered_users = registered_users_form.save(commit=False)
-            registered_users.user = user
-
-            registered_users.save()
-
             registered = True
         else:
-            print (user_form.errors, registered_users_form.errors)
+            print (user_form.errors)
 
     else:
         #sf.main()
         user_form = UserForm()
-        registered_users_form = RegisteredUsersForm()
-
     return render(request,
-            'mail_system/register.html', {'user_form': user_form , 'registered_users_form': registered_users_form, 'registered': registered} )
+            'mail_system/register.html', {'user_form': user_form , 'registered': registered} )
 
 def user_login(request):
     if request.method == 'POST':
-        print("hiii")
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username = username,password = password)
-        print (username,password,user)
         if user:
             if user.is_active:
                 login(request,user)
@@ -66,33 +44,19 @@ def user_login(request):
     else:
         return render(request,'mail_system/login.html',{})
 
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect('/mail_system/')
-
-
-def index(request):
-    #Neede to write the index.html in templates
-    return render(request, 'index.html')
-
-
-@login_required
-def compose(request):
+def mail_compose(request):
     if request.method == 'GET':
         mail_form = MailForm()
     return render(request, 'compose.html',{'mail_form': mail_form })
 
-@login_required
 def mail_sent(request):
     if request.method == 'POST':
         mail_form = MailForm(data = request.POST) 
         if mail_form.is_valid():
-            print(request.user.username)
             mail = mail_form.save() 
             to_email = mail_form.cleaned_data.get('receiver')
-            to_user = RegisteredUsers.objects.get(email = to_email)
-            from_user = RegisteredUsers.objects.get(username = request.user.username)
+            to_user = User.objects.get(email = to_email)
+            from_user = User.objects.get(username = request.user.username)
 
             if to_user and from_user:
                 f = open('my_classifier.pickle', 'rb')
