@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from mail_system.models import RegisteredUsers, Mail, UserMails
+from mail_system.models import RegisteredUsers, Mail, UserMails , Records
 from mail_system.spamfilter import SpamFilter as sf
 import pickle
 
@@ -90,10 +90,10 @@ def mail_sent(request):
         if mail_form.is_valid():
             print(request.user.username)
             mail = mail_form.save() 
-            #print(mail_form.__dict__('receiver'))
             to_email = mail_form.cleaned_data.get('receiver')
-            to_user = User.objects.get(email = to_email)
-            from_user = User.objects.get(username = request.user.username)
+            to_user = RegisteredUsers.objects.get(email = to_email)
+            from_user = RegisteredUsers.objects.get(username = request.user.username)
+
             if to_user and from_user:
                 f = open('my_classifier.pickle', 'rb')
                 classifier = pickle.load(f)
@@ -105,7 +105,15 @@ def mail_sent(request):
                     mail.is_spam = False
                 else:
                     mail.is_spam = True
-                print("$$$$$$$$$"+check)
+                try:
+                    record = Records.objects.get(from_user_id = from_user.id,to_user_id = to_user.id)
+                    record.mail_count =  record.mail_count + 1
+                    if record.is_spam == True:
+                        mail.is_spam = True
+                        record.is_spam = True    
+                except:
+                    record = Records(from_user_id = from_user.id,to_user_id = to_user.id,is_spam = mail.is_spam, mail_count = 1)
+                    record.save()
                 mail.save()
                 user_mail = UserMails(receiver_id = to_user.id , sender_id = from_user.id , mail_id = mail.id)
                 user_mail.save()
