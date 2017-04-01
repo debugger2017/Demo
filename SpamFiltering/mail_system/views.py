@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+
 from mail_system.forms import UserForm, MailForm
 from django.contrib.auth.models import User
 from mail_system.models import Mail, User_Mail, Relation
@@ -44,7 +45,7 @@ def user_login(request):
     else:
         return render(request,'mail_system/login.html',{})
 
-def mail_compose(request):
+def mails_compose(request):
     if request.method == 'GET':
         mail_form = MailForm()
     return render(request, 'compose.html',{'mail_form': mail_form })

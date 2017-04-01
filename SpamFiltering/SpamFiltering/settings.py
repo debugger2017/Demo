@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mail_system',    
+    'mail_system',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -51,9 +51,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'demo_project.urls'
+ROOT_URLCONF = 'SpamFiltering.urls'
 
-WSGI_APPLICATION = 'demo_project.wsgi.application'
+WSGI_APPLICATION = 'SpamFiltering.wsgi.application'
 
 
 # Database
@@ -62,7 +62,7 @@ WSGI_APPLICATION = 'demo_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'demo_project',
+        'NAME': 'spamfiltering',
         'USER': 'walchandite',
         'PASSWORD': 'wce',
         'HOST': 'localhost',
@@ -87,7 +87,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
+STATIC_ROOT = '/static/'
+
 STATIC_URL = '/static/'
+
+
 
 PASSWORD_HASHERS = (
         'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
