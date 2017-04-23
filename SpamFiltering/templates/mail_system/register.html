@@ -26,7 +26,6 @@
                             <form id="user_form" method="post" action="/mail_system/register/" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {{user_form.as_p}}
-                                {{registered_users_form.as_p}}
                                 <div class = "row">
                                     <div class = "col m4 offset-m4"> 
                                         <button class="btn waves-effect waves-light" type="submit">Submit

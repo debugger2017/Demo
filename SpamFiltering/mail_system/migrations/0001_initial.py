@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Mail',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('subject', models.CharField(max_length=256)),
                 ('content', models.CharField(max_length=4096)),
                 ('is_spam', models.BooleanField(default=False)),
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Mail_Information',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('is_read', models.BooleanField(default=False)),
                 ('mail', models.ForeignKey(to='mail_system.Mail')),
                 ('receiver', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='receiver_id')),
@@ -42,8 +42,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Spammed_Sender',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
-                ('is_spam', models.BooleanField(default=False)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('is_sender_spam', models.BooleanField(default=False)),
                 ('from_user', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='from_user_id')),
                 ('to_user', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='to_user_id')),
             ],

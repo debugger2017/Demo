@@ -2,19 +2,19 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
-
 from mail_system.forms import UserForm, MailForm
 from django.contrib.auth.models import User
-from mail_system.models import Mail, User_Mail, Relation
+from mail_system.models import Mail, Mail_Information, Spammed_Sender
 from mail_system.spamfilter import SpamFilter as sf
 import pickle
 
-def user_register(request):
+
+
+def user_registration(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
-        if user_form.is_valid() and registered_users_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
             user.save()
@@ -45,76 +45,95 @@ def user_login(request):
     else:
         return render(request,'mail_system/login.html',{})
 
-def mails_compose(request):
+def compose_mail(request):
     if request.method == 'GET':
         mail_form = MailForm()
     return render(request, 'compose.html',{'mail_form': mail_form })
 
-def mail_sent(request):
-    if request.method == 'POST':
-        mail_form = MailForm(data = request.POST) 
-        if mail_form.is_valid():
-            mail = mail_form.save() 
-            to_email = mail_form.cleaned_data.get('receiver')
-            to_user = User.objects.get(email = to_email)
-            from_user = User.objects.get(username = request.user.username)
 
-            if to_user and from_user:
-                f = open('my_classifier.pickle', 'rb')
-                classifier = pickle.load(f)
-                f.close()
-                text = mail.subject+" "+mail.content    
-                features = sf.get_features(text,'dummy')
-                check = classifier.classify(features)
-                if check == "ham":
-                    mail.is_spam = False
-                else:
-                    mail.is_spam = True
-                try:
-                    record = Records.objects.get(from_user_id = from_user.id,to_user_id = to_user.id)
-                    record.mail_count =  record.mail_count + 1
-                    if record.is_spam == True:
-                        mail.is_spam = True
-                        record.is_spam = True    
-                except:
-                    record = Records(from_user_id = from_user.id,to_user_id = to_user.id,is_spam = mail.is_spam, mail_count = 1)
-                    record.save()
-                mail.save()
-                user_mail = UserMails(receiver_id = to_user.id , sender_id = from_user.id , mail_id = mail.id)
-                user_mail.save()
+def send_mail(request):
+    if request.method == 'POST':
+        mail_form = MailForm(data = request.POST)
+        if mail_form.is_valid():
+            mail = mail_form.save()
+            receiver = User.objects.get(email = mail_form.cleaned_data.get('receiver'))
+            sender = User.objects.get(username = request.user.username)
+            record = mark_spammed_sender(mail, receiver, sender)
+            if record.is_sender_spam == True:
+                mail.is_spam = True
+            else:
+                classify_mail(mail,record)
+            save_models(mail, receiver, sender, record)
         else:
             print(mail_form.errors)
     return render(request, 'mail_sent.html')
 
-@login_required
+
+def mark_spammed_sender(mail, receiver, sender):
+    if receiver and sender:
+        try:
+            record = Spammed_Sender.objects.get(from_user_id=sender.id, to_user_id = receiver.id)
+        except:
+            record = Spammed_Sender(from_user_id=sender.id, to_user_id=receiver.id)
+    return record
+
+
+def save_models(mail, receiver, sender, record):
+    mail.save()
+    user_mail = Mail_Information(receiver_id=receiver.id, sender_id=sender.id, mail_id=mail.id)
+    user_mail.save()
+    record.save()
+
+
+def classify_mail(mail,record):
+        f = open('my_classifier.pickle', 'rb')
+        classifier = pickle.load(f)
+        f.close()
+        text = mail.subject + " " + mail.content
+        features = sf.get_features(text, 'dummy')
+        check = classifier.classify(features)
+        if check == "ham":
+            print (check)
+            mail.is_spam = False
+        else:
+            mail.is_spam = True
+            
+
 def inbox(request):
     if request.method == 'GET':
         current_user = request.user
-        records = UserMails.objects.filter(receiver_id=current_user.id) 
+        records = Mail_Information.objects.filter(receiver_id=current_user.id)
+        print(current_user.username)
         mails = []
         for record in records:
-            from_user = User.objects.get(id=record.sender_id)
+            sender = User.objects.get(id=record.sender_id)
             mail = Mail.objects.get(id=record.mail_id)
             if mail.is_spam == False:
                 mails.append(mail)
         return render(request,
-            'mail_system/inbox.html', {'current_user': current_user, 'records': records , 'mails':mails , 'from_user':from_user})
+            'mail_system/inbox.html', {'current_user': current_user, 'records': records , 'mails':mails , 'sender':sender})
 
-def spam(request): 
+def spam_mails(request):
     if request.method == 'GET':
         current_user = request.user
-        records = UserMails.objects.filter(receiver_id=current_user.id) 
+        records = Mail_Information.objects.filter(receiver_id=current_user.id)
         mails = []
         for record in records:
-            from_user = User.objects.get(id=record.sender_id)
+            sender = User.objects.get(id=record.sender_id)
             mail = Mail.objects.get(id=record.mail_id)
             if mail.is_spam == True:
                 mails.append(mail)
         return render(request,
-            'mail_system/inbox.html', {'current_user': current_user, 'records': records , 'mails':mails , 'from_user':from_user})
+            'mail_system/spam.html', {'current_user': current_user, 'records': records , 'mails':mails , 'sender':sender})
 
 def test(request):
-    if request.method == 'GET':
-        mail = Mail.objects.get(id=request.META['QUERY_STRING'])
+    if request.method == 'GET': 
+        mail = Mail.objects.get(id=request.META['QUERY_STRING'])  
+        current_user = request.user
+        receiver = User.objects.get(id = Mail_Information.objects.get(mail_id = mail.id))
+        record = Spammed_Sender.objects.filter(from_user_id = current_user.id , to_user_id = receiver.id)
         mail.is_spam = True
+        record.is_sender_spam = True
         mail.save()
+        record.save()
+        

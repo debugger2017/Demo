@@ -3,10 +3,11 @@ from mail_system import views
 
 	
 urlpatterns = patterns('',
-	url(r'^register/$', views.user_register, name='user_register'),
+	url(r'^register/$', views.user_registration, name='user_registration'),
 	url(r'^login/$', views.user_login, name='login'),	
-	url(r'^compose/$', views.mail_compose, name = 'mail_compose'),
-	url(r'^mail_sent/$', views.mail_sent, name = 'mail_sent'),
-	url(r'^spam/$', views.spam, name = 'spam'),
-	url(r'^inbox/test/$', views.test, name = 'test')
+	url(r'^compose/$', views.compose_mail, name = 'compose_mail'),
+	url(r'^mail_sent/$', views.send_mail, name = 'send_mail'),
+	url(r'^spam/$', views.spam_mails, name = 'spam_mails'),
+	url(r'^inbox/test/$', views.test, name = 'test'),
+	url(r'^inbox/$', views.inbox, name = 'inbox')
 )
