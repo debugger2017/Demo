@@ -30,7 +30,7 @@
 				
 					<div >
 						<tbody>
-				        	<tr class="test">
+				        	<tr class="move_to_spam">
 				        		<td class = "id">{{mail.id}}</td>
 				        		<td>{{from_user.username}}</td>
 				        		<td>{{mail.subject}}</td>
@@ -46,13 +46,13 @@
 	</div>
 </body>
 	<script>
-		$(".test").click(function(){
+		$(".move_to_spam").click(function(){
 			console.log("click");
 			$(this).css("display", "none");
 			
 			var data = $(this).children( 'td.id' ).html();
 			$.ajax({
-			  url: "test",
+			  url: "move_to_spam",
 			  method: "get",
 			  data: data,
 			  context: document.body

@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 	url(r'^compose/$', views.compose_mail, name = 'compose_mail'),
 	url(r'^mail_sent/$', views.send_mail, name = 'send_mail'),
 	url(r'^spam/$', views.spam_mails, name = 'spam_mails'),
-	url(r'^inbox/test/$', views.test, name = 'test'),
+    url(r'^spam/move_to_inbox/', views.move_to_inbox, name = 'move_to_inbox'),
+	url(r'^inbox/move_to_spam/$', views.move_to_spam, name = 'move_to_spam'),
 	url(r'^inbox/$', views.inbox, name = 'inbox')
 )

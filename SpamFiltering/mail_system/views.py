@@ -6,9 +6,12 @@ from mail_system.forms import UserForm, MailForm
 from django.contrib.auth.models import User
 from mail_system.models import Mail, Mail_Information, Spammed_Sender
 from mail_system.spamfilter import SpamFilter as sf
-import pickle
+import pickle   
 
 
+CLASSIFY = 0
+ALWAYS_INBOX = 1
+ALWAYS_SPAM = 2
 
 def user_registration(request):
     registered = False
@@ -59,10 +62,10 @@ def send_mail(request):
             receiver = User.objects.get(email = mail_form.cleaned_data.get('receiver'))
             sender = User.objects.get(username = request.user.username)
             record = mark_spammed_sender(mail, receiver, sender)
-            if record.is_sender_spam == True:
-                mail.is_spam = True
-            else:
+            if record.is_sender_spam == CLASSIFY:
                 classify_mail(mail,record)
+            elif record.is_sender_spam == ALWAYS_SPAM:
+                mail.is_spam = True
             save_models(mail, receiver, sender, record)
         else:
             print(mail_form.errors)
@@ -126,14 +129,27 @@ def spam_mails(request):
         return render(request,
             'mail_system/spam.html', {'current_user': current_user, 'records': records , 'mails':mails , 'sender':sender})
 
-def test(request):
+def move_to_spam(request):
     if request.method == 'GET': 
-        mail = Mail.objects.get(id=request.META['QUERY_STRING'])  
-        current_user = request.user
-        receiver = User.objects.get(id = Mail_Information.objects.get(mail_id = mail.id))
-        record = Spammed_Sender.objects.filter(from_user_id = current_user.id , to_user_id = receiver.id)
+        mail = Mail.objects.get(id=request.META['QUERY_STRING']) 
         mail.is_spam = True
-        record.is_sender_spam = True
+        current_user = request.user
+        mail_info = Mail_Information.objects.get(mail_id = mail.id)
+        sender = User.objects.get(id=mail_info.sender.id)
+        record = Spammed_Sender.objects.get(from_user_id = sender.id , to_user_id = current_user.id)
+        record.is_sender_spam = ALWAYS_SPAM
         mail.save()
         record.save()
-        
+
+def move_to_inbox(request):
+    if request.method == 'GET': 
+        mail = Mail.objects.get(id=request.META['QUERY_STRING']) 
+        mail.is_spam = False
+        current_user = request.user
+        mail_info = Mail_Information.objects.get(mail_id = mail.id)
+        sender = User.objects.get(id=mail_info.sender.id)
+        print(current_user.username + "    " + sender.username)
+        record = Spammed_Sender.objects.get(from_user_id = sender.id , to_user_id = current_user.id)
+        record.is_sender_spam = ALWAYS_INBOX
+        mail.save()
+        record.save()

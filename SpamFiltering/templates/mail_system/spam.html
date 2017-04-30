@@ -3,11 +3,14 @@
 <html>
 <head>
 	<title></title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
 	<script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">	  
+	
 </head>
 <body id = "bg" style="background-image: url('{% static 'img/IMG_358033.jpg'%}')";>
 	{% csrf_token %}
@@ -16,7 +19,7 @@
 			<table class="highlight">
 				<thead>
 		          <tr>
-		          	  
+		          	  <th data-field="id">#</th>
 		          	  <th data-field="id">From</th>
 		              <th data-field="name">Subject</th>
 		              <th data-field="price">Content</th>
@@ -24,17 +27,40 @@
 		          </tr>
 		        </thead>
 				{% for mail in mails %}
-					<tbody>
-			        	<tr>
-			        		<td>{{sender.username}}</td>
-			        		<td>{{mail.subject}}</td>
-			            	<td>{{mail.content}}</td>
-			            	<td>{{mail.timestamp}}</td>	            				          		
-			          	</tr>
-			       	</tbody>
+				
+					<div >
+						<tbody>
+				        	<tr class="move_to_inbox">
+				        		<td class = "id">{{mail.id}}</td>
+				        		<td>{{sender.username}}</td>
+				        		<td>{{mail.subject}}</td>
+				            	<td>{{mail.content}}</td>
+				            	<td>{{mail.timestamp}}</td>	            				          		
+				          	</tr>
+				       	</tbody>
+				      </div>
+				
 			    {% endfor %}
 			</table>
 		</div>
 	</div>
 </body>
+	<script>
+		$(".move_to_inbox").click(function(){
+			console.log("click");
+			$(this).css("display", "none");
+			
+			var data = $(this).children( 'td.id' ).html();
+			$.ajax({
+			  url: "move_to_inbox",
+			  method: "get",
+			  data: data,
+			  context: document.body
+			}).done(function() {
+			  $( this ).addClass( "done" );
+			});
+		})
+	</script>
+
+
 </html>
