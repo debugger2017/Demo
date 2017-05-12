@@ -23,19 +23,16 @@
 		          	  <th data-field="id">From</th>
 		              <th data-field="name">Subject</th>
 		              <th data-field="price">Content</th>
-		              <th data-field="price">Time</th>
 		          </tr>
 		        </thead>
 				{% for mail in mails %}
-				
 					<div >
 						<tbody>
 				        	<tr class="move_to_inbox">
-				        		<td class = "id">{{mail.id}}</td>
-				        		<td>{{sender.username}}</td>
-				        		<td>{{mail.subject}}</td>
-				            	<td>{{mail.content}}</td>
-				            	<td>{{mail.timestamp}}</td>	            				          		
+				        		<td class = "id">{{mail.mail.id}}</td>
+				        		<td>{{mail.sender.username}}</td>
+				        		<td>{{mail.mail.subject}}</td>
+				            	<td>{{mail.mail.content}}</td>	            				          		
 				          	</tr>
 				       	</tbody>
 				      </div>

@@ -108,13 +108,14 @@ def inbox(request):
         records = Mail_Information.objects.filter(receiver_id=current_user.id)
         print(current_user.username)
         mails = []
+        
         for record in records:
             sender = User.objects.get(id=record.sender_id)
             mail = Mail.objects.get(id=record.mail_id)
             if mail.is_spam == False:
-                mails.append(mail)
+                mails.append(record)
         return render(request,
-            'mail_system/inbox.html', {'current_user': current_user, 'records': records , 'mails':mails , 'sender':sender})
+            'mail_system/inbox.html', {'mails': mails})
 
 def spam_mails(request):
     if request.method == 'GET':
@@ -125,9 +126,9 @@ def spam_mails(request):
             sender = User.objects.get(id=record.sender_id)
             mail = Mail.objects.get(id=record.mail_id)
             if mail.is_spam == True:
-                mails.append(mail)
+                mails.append(record)
         return render(request,
-            'mail_system/spam.html', {'current_user': current_user, 'records': records , 'mails':mails , 'sender':sender})
+            'mail_system/spam.html', {'mails':mails })
 
 def move_to_spam(request):
     if request.method == 'GET': 
