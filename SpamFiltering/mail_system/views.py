@@ -49,9 +49,10 @@ def user_login(request):
         return render(request,'mail_system/login.html',{})
 
 def compose_mail(request):
+    current_user = request.user
     if request.method == 'GET':
         mail_form = MailForm()
-    return render(request, 'compose.html',{'mail_form': mail_form })
+    return render(request, 'compose.html',{'mail_form': mail_form , 'current_user' : current_user })
 
 
 def send_mail(request):
@@ -115,7 +116,7 @@ def inbox(request):
             if mail.is_spam == False:
                 mails.append(record)
         return render(request,
-            'mail_system/inbox.html', {'mails': mails})
+            'mail_system/inbox.html', {'mails': mails , 'current_user': current_user})
 
 def spam_mails(request):
     if request.method == 'GET':
@@ -128,7 +129,7 @@ def spam_mails(request):
             if mail.is_spam == True:
                 mails.append(record)
         return render(request,
-            'mail_system/spam.html', {'mails':mails })
+            'mail_system/spam.html', {'mails':mails , 'current_user' : current_user})
 
 def move_to_spam(request):
     if request.method == 'GET': 

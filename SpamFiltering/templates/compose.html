@@ -2,8 +2,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Mail System</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    {% csrf_token %}
+    <title>{{current_user}}-Compose Mail</title>        
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
         <link rel="stylesheet" href="{% static 'css/compose.css' %}">
     </head>
